@@ -59,31 +59,39 @@ def verify(block):
     message = "BLOCK VERIfIED"
     self.wfile.write(message.encode('utf-8'))
         
-# def randomNounce():
-#     number_of_strings = 5
-#     length_of_string = 8
-#     for x in range(number_of_strings):
-#         return (
-#             "".join(
-#                 random.choice(string.ascii_letters + string.digits)
-#                 for _ in range(length_of_string)
-#             )
-#         )
-
-
 
 
 # class Block:
-#     def __init__(self, prev_id, data, height, timestamp):
+#     def __init__(self, id, prev_id, data, height, timestamp):
 #         self.prev_id = prev_id
-#         if not isinstance(data, list) or len(data) == 0:
-#             raise ValueError("Data must be a non-empty list") 
 #         self.data = data
 #         self.height = height
 #         self.nonce = randomNounce()
-#         self.id = sha256()
           # Getting the current date and time
 #         dt = datetime.now()
           # getting the timestamp
 #         ts = datetime.timestamp(dt)
 #         self.timestamp = ts
+          # Calculer l'identifiant du bloc
+#         self.id = self.calculate_hash()
+    
+    # def randomNounce():
+    #     number_of_strings = 5
+    #     length_of_string = 8
+    #     for x in range(number_of_strings):
+    #         return (
+    #             "".join(
+    #                 random.choice(string.ascii_letters + string.digits)
+    #                 for _ in range(length_of_string)
+    #             )
+    #         )
+
+    #def calculate_hash(self):
+    #   block_string = json.dumps({
+    #      "prev_id": self.prev_id,
+            "data": self.data,
+            "height": self.height,
+            "nonce": self.nonce,
+            "timestamp": self.timestamp
+        }, sort_keys=True).encode()
+        return hashlib.sha256(block_string).hexdigest()
