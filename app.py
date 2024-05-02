@@ -59,6 +59,29 @@ def verify(block):
     message = "BLOCK VERIfIED"
     self.wfile.write(message.encode('utf-8'))
         
+def verifytx(tx):
+    if len(tx.addrSender) != 256
+        message = "TX_NOK"
+        self.wfile.write(message.encode('utf-8'))
+        return
+    if len(tx.addrRcpt) != 256 
+        message = "TX_NOK"
+        self.wfile.write(message.encode('utf-8'))
+        return
+    if len(tx.amount) != 256
+        message = "TX_NOK"
+        self.wfile.write(message.encode('utf-8'))
+        return
+    if not isinstance(tx.timestsamp, int):
+        message = "TX_NOK"
+        self.wfile.write(message.encode('utf-8'))
+        return
+    if not isinstance(tx.sig, str):
+        message = "TX_NOK"
+        self.wfile.write(message.encode('utf-8'))
+        return
+    message = "TX_OK"
+    self.wfile.write(message.encode('utf-8'))
 
 
 # class Block:
