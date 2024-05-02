@@ -17,7 +17,7 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
 
         # Vérifier si l'URL contient "/verify"
         if url != "/verify":
-            message = "unknown action."
+            message = "UNKNOWN ACTION"
         # Envoyer le message de réponse
         self.wfile.write(message.encode('utf-8'))
 
@@ -26,6 +26,27 @@ with socketserver.TCPServer(("", PORT), MyHttpRequestHandler) as httpd:
     httpd.serve_forever()
 
 
+def verify(block):
+    if not block:
+        print(f"BLOCK_MISSING")
+        return
+    if len(block.id) != 256:
+        print(f"BLOCK_INCORRECT")
+        return
+    if len(block.prev_id) != 256:
+        print(f"BLOCK_INCORRECT")
+        return
+    if not data:
+        print(f"BLOCK_INCORRECT")
+        return
+    if len(block.nounce) != 256:
+        print(f"BLOCK_INCORRECT")
+        return
+    if not isinstance(block.height, int):
+        print(f"BLOCK_INCORRECT")
+        return
+    print(f"BLOCK VERIfIED")
+        
 # def randomNounce():
 #     number_of_strings = 5
 #     length_of_string = 8
