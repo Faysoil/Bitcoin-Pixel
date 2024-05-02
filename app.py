@@ -12,15 +12,18 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'text/plain; charset=utf-8')
         self.end_headers()
-
-        # Récupérer l'URL demandée (chemin)
-        url = self.path
-
-        # Créer le message de réponse incluant l'URL demandée
-        message1 = f"Bonjour! Vous avez atteint la fonction 'hello' de ce serveur."
         
+        #Message de réponse 
+        message1 = f"Bonjour ! Bienvenue sur IPIxel ;) "
         self.wfile.write(message1.encode('utf-8'))
+        
+        # Récupérer l'URL (chemin)
+        url = self.path
+        if url.encode('utf-8') != "verify":
+            self.wfile.write("Unknown_Action")
+            
         self.wfile.write(url.encode('utf-8'))
+        
 
 with socketserver.TCPServer(("", PORT), MyHttpRequestHandler) as httpd:
     print(f"Le serveur est démarré sur le port {PORT}")
