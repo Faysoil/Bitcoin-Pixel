@@ -29,27 +29,35 @@ with socketserver.TCPServer(("", PORT), MyHttpRequestHandler) as httpd:
 
 def verify(block):
     if not block:
-        print(f"BLOCK_MISSING")
+        message = "BLOCK_MISSING"
+        self.wfile.write(message.encode('utf-8'))
         return
     if len(block.id) != 256:
-        print(f"BLOCK_INCORRECT")
+        message = "BLOCK_INCORRECT"
+        self.wfile.write(message.encode('utf-8'))
         return
     if len(block.prev_id) != 256:
-        print(f"BLOCK_INCORRECT")
+        message = "BLOCK_INCORRECT"
+        self.wfile.write(message.encode('utf-8'))
         return
     if not data:
-        print(f"BLOCK_INCORRECT")
+        message = "BLOCK_INCORRECT"
+        self.wfile.write(message.encode('utf-8'))
         return
     if len(block.nounce) != 256:
-        print(f"BLOCK_INCORRECT")
+        message = "BLOCK_INCORRECT"
+        self.wfile.write(message.encode('utf-8'))
         return
     if not isinstance(block.height, int):
-        print(f"BLOCK_INCORRECT")
+        message = "BLOCK_INCORRECT"
+        self.wfile.write(message.encode('utf-8'))
         return
     if not isinstance(block.timestsamp, int):
-        print(f"BLOCK_INCORRECT")
+        message = "BLOCK_INCORRECT"
+        self.wfile.write(message.encode('utf-8'))
         return
-    print(f"BLOCK VERIfIED")
+    message = "BLOCK VERIfIED"
+    self.wfile.write(message.encode('utf-8'))
         
 # def randomNounce():
 #     number_of_strings = 5
