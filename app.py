@@ -36,6 +36,7 @@ class Block:
         self.hash = hash
         self.nonce = nonce
 
+#Pour verifier la validite d'un block
 def verify(block):
     if not block:
         message = "BLOCK_MISSING"
@@ -67,7 +68,8 @@ def verify(block):
         return
     message = "BLOCK VERIfIED"
     self.wfile.write(message.encode('utf-8'))
-        
+
+#Pour verifier la validite d'une transaction
 def verifytx(tx):
     if len(tx.addrSender) != 256
         message = "TX_NOK"
@@ -92,3 +94,37 @@ def verifytx(tx):
     message = "TX_OK"
     self.wfile.write(message.encode('utf-8'))
 
+class Transaction:
+    def __init__(self, addrSender, addrRcpt, amount, timestamp, sig):
+        self.addrSender = addrSender  # Adresse de l'émetteur
+        self.addrRcpt = addrRcpt      # Adresse du destinataire
+        self.amount = amount          # Montant de la transaction
+        self.timestamp = timestamp    # Horodatage de la transaction
+        self.sig = sig                # Signature de la transaction
+
+#Verification + Validation
+def new_transaction(tx):
+    # Vérifier si la transaction est valide en appelant verifytx
+    if verifytx(tx):
+        # Vérifier si l'émetteur a un solde suffisant
+        if check_balance(tx.addrSender, tx.addrRcpt):
+            # Ajouter la transaction à la blockchain (a voir)
+            
+            return "Transaction valide et ajoutée à la blockchain."
+        else:
+            return "Solde insuffisant pour effectuer la transaction."
+    else:
+        return "Transaction invalide."
+
+def check_balance(sender, amount):
+    # Vérifier le solde de l'émetteur en parcourant la blockchain
+    balance = 0
+    for block in blockchain:
+        for transaction in block.data:
+            if transaction.addrSender == sender:
+                balance -= transaction.amount
+            if transaction.addrRcpt == sender:
+                balance += transaction.amount
+                
+    # Si le solde est suffisant pour la transaction actuelle, retourner True, sinon False
+    return balance >= amount
