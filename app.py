@@ -106,12 +106,12 @@ def verifytx(tx):
     return true
 
 class Transaction:
-    def __init__(self, addrSender, addrRcpt, amount, timestamp, sig):
+    def __init__(self, addrSender, addrRcpt, amount, timestamp):
         self.addrSender = addrSender  # Adresse de l'émetteur
         self.addrRcpt = addrRcpt      # Adresse du destinataire
         self.amount = amount          # Montant de la transaction
         self.timestamp = timestamp    # Horodatage de la transaction
-        self.sig = sig                # Signature de la transaction
+        
 
 #Verification + Validation
 @app.route('/newtx')
