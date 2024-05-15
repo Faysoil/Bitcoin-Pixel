@@ -1,6 +1,8 @@
+import hashlib
 import http.server
 import socketserver
 from datetime import datetime
+import time
 from flask import Flask
 
 app = Flask(__name__)
@@ -8,31 +10,6 @@ app = Flask(__name__)
 PORT = 9090
 blockchain = []
 
-class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
-    def do_GET(self):
-
-        genesis = create_genesis_block()
-        blockchain.append(genesis)
-        print(blockchain)
-        self.send_response(200)
-        self.send_header('Content-type', 'text/plain; charset=utf-8')
-        self.end_headers()
-
-        # Récupérer l'URL (chemin)
-        url = self.path
-
-        # Message de réponse par défaut
-        message = "Bonjour ! Bienvenue sur IPIxel ;)"
-
-        # Vérifier si l'URL contient "/verify"
-        if url != "/verify":
-            message = "UNKNOWN ACTION"
-        # Envoyer le message de réponse
-        self.wfile.write(message.encode('utf-8'))
-
-with socketserver.TCPServer(("", PORT), MyHttpRequestHandler) as httpd:
-    print(f"Le serveur est démarré sur le port {PORT}")
-    httpd.serve_forever()
 
 class Block:
     def __init__(self, id, previous_hash, timestamp, data, hash, nonce):
@@ -49,65 +26,65 @@ def verify(block):
     if not block:
         message = "BLOCK_MISSING"
         print(message.encode('utf-8'))
-        return false
+        return False
     if len(block.id) != 256:
         message = "BLOCK_INCORRECT"
         print(message.encode('utf-8'))
-        return false
+        return False
     if len(block.prev_id) != 256:
         message = "BLOCK_INCORRECT"
         print(message.encode('utf-8'))
-        return false
+        return False
     if not block.data:
         message = "BLOCK_INCORRECT"
         print(message.encode('utf-8'))
-        return false
+        return False
     if len(block.nounce) != 256:
         message = "BLOCK_INCORRECT"
         print(message.encode('utf-8'))
-        return false
+        return False
     if not isinstance(block.height, int):
         message = "BLOCK_INCORRECT"
         print(message.encode('utf-8'))
-        return false
+        return False
     if not isinstance(block.timestsamp, int):
         message = "BLOCK_INCORRECT"
         print(message.encode('utf-8'))
-        return false
+        return False
     for i in range(len(block.data)):
-        if not verifytx(block.data[i])
+        if not verifytx(block.data[i]):
             message = "TX_NOK"
             print(message.encode('utf-8'))
-            return false
+            return False
     message = "BLOCK VERIfIED"
     print(message.encode('utf-8'))
-    return true
+    return True
 
 #Pour verifier la validite d'une transaction
 def verifytx(tx):
     if len(tx.addrSender) != 256:
         message = "TX_NOK"
         print(message.encode('utf-8'))
-        return false
+        return False
     if len(tx.addrRcpt) != 256: 
         message = "TX_NOK"
         print(message.encode('utf-8'))
-        return false
+        return False
     if len(tx.amount) != 256:
         message = "TX_NOK"
         print(message.encode('utf-8'))
-        return false
+        return False
     if not isinstance(tx.timestsamp, int):
         message = "TX_NOK"
         print(message.encode('utf-8'))
-        return false
+        return False
     if not isinstance(tx.sig, str):
         message = "TX_NOK"
         print(message.encode('utf-8'))
-        return false
+        return False
     message = "TX_OK"
     print(message.encode('utf-8'))
-    return true
+    return True
 
 class Transaction:
     def __init__(self, addrSender, addrRcpt, amount, timestamp):
@@ -174,17 +151,43 @@ def create_genesis_block():
     genesis_timestamp = time.time()
     genesis_nonce = 0
 
-    genesis_hash = calculate_hash(Block(genesis_id, genesis_previous_hash, genesis_timestamp, genesis_block_data, genesis_nonce))
+    genesis_hash = calculate_hash(Block(genesis_id, genesis_previous_hash, genesis_timestamp, genesis_block_data,0, genesis_nonce))
 
     genesis_block = Block(genesis_id, genesis_previous_hash, genesis_timestamp, genesis_block_data, genesis_hash, genesis_nonce)
 
     return genesis_block
 
-# Test
-genesis_block = create_genesis_block()
-print("Genesis Block ID:", genesis_block.id)
-print("Genesis Block Previous Hash:", genesis_block.previous_hash)
-print("Genesis Block Timestamp:", genesis_block.timestamp)
-print("Genesis Block Data:", genesis_block.data)
-print("Genesis Block Hash:", genesis_block.hash)
-print("Genesis Block Nonce:", genesis_block.nonce)
+# # Test
+# genesis_block = create_genesis_block()
+# print("Genesis Block ID:", genesis_block.id)
+# print("Genesis Block Previous Hash:", genesis_block.previous_hash)
+# print("Genesis Block Timestamp:", genesis_block.timestamp)
+# print("Genesis Block Data:", genesis_block.data)
+# print("Genesis Block Hash:", genesis_block.hash)
+# print("Genesis Block Nonce:", genesis_block.nonce)
+
+
+class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+
+        genesis = create_genesis_block()
+        blockchain.append(genesis)
+        self.send_response(200)
+        self.send_header('Content-type', 'text/plain; charset=utf-8')
+        self.end_headers()
+
+        # Récupérer l'URL (chemin)
+        url = self.path
+
+        # Message de réponse par défaut
+        message = "Bonjour ! Bienvenue sur IPIxel ;)"
+
+        # Vérifier si l'URL contient "/verify"
+        if url != "/verify":
+            message = "UNKNOWN ACTION"
+        # Envoyer le message de réponse
+        self.wfile.write(message.encode('utf-8'))
+
+with socketserver.TCPServer(("", PORT), MyHttpRequestHandler) as httpd:
+    print(f"Le serveur est démarré sur le port {PORT}")
+    httpd.serve_forever()
