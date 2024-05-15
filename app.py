@@ -1,6 +1,9 @@
 import http.server
 import socketserver
 from datetime import datetime
+from flask import Flask
+
+app = Flask(__name__)
 
 PORT = 9090
 blockchain = []
@@ -41,59 +44,59 @@ class Block:
 def verify(block):
     if not block:
         message = "BLOCK_MISSING"
-        self.wfile.write(message.encode('utf-8'))
+        print(message.encode('utf-8'))
         return
     if len(block.id) != 256:
         message = "BLOCK_INCORRECT"
-        self.wfile.write(message.encode('utf-8'))
+        print(message.encode('utf-8'))
         return
     if len(block.prev_id) != 256:
         message = "BLOCK_INCORRECT"
-        self.wfile.write(message.encode('utf-8'))
+        print(message.encode('utf-8'))
         return
-    if not data:
+    if not block.data:
         message = "BLOCK_INCORRECT"
-        self.wfile.write(message.encode('utf-8'))
+        print(message.encode('utf-8'))
         return
     if len(block.nounce) != 256:
         message = "BLOCK_INCORRECT"
-        self.wfile.write(message.encode('utf-8'))
+        print(message.encode('utf-8'))
         return
     if not isinstance(block.height, int):
         message = "BLOCK_INCORRECT"
-        self.wfile.write(message.encode('utf-8'))
+        print(message.encode('utf-8'))
         return
     if not isinstance(block.timestsamp, int):
         message = "BLOCK_INCORRECT"
-        self.wfile.write(message.encode('utf-8'))
+        print(message.encode('utf-8'))
         return
     message = "BLOCK VERIfIED"
-    self.wfile.write(message.encode('utf-8'))
+    print(message.encode('utf-8'))
 
 #Pour verifier la validite d'une transaction
 def verifytx(tx):
     if len(tx.addrSender) != 256:
         message = "TX_NOK"
-        self.wfile.write(message.encode('utf-8'))
+        print(message.encode('utf-8'))
         return
     if len(tx.addrRcpt) != 256: 
         message = "TX_NOK"
-        self.wfile.write(message.encode('utf-8'))
+        print(message.encode('utf-8'))
         return
     if len(tx.amount) != 256:
         message = "TX_NOK"
-        self.wfile.write(message.encode('utf-8'))
+        print(message.encode('utf-8'))
         return
     if not isinstance(tx.timestsamp, int):
         message = "TX_NOK"
-        self.wfile.write(message.encode('utf-8'))
+        print(message.encode('utf-8'))
         return
     if not isinstance(tx.sig, str):
         message = "TX_NOK"
-        self.wfile.write(message.encode('utf-8'))
+        print(message.encode('utf-8'))
         return
     message = "TX_OK"
-    self.wfile.write(message.encode('utf-8'))
+    print(message.encode('utf-8'))
 
 class Transaction:
     def __init__(self, addrSender, addrRcpt, amount, timestamp, sig):
@@ -136,10 +139,10 @@ def new_block(bloc):
     tmp = 0
     i = bloc.height
     length = len(bloc)
-    while i < len(blockchain) 
+    while i < len(blockchain):
         tmp += len(blockchain[i].data)
-        i++
-    if tmp < length
+        i=i+1
+    if tmp < length:
         return "Bloc ajouté"
         #Transaction ajouté à la blockchain
     return "Bloc non ajouté"
