@@ -72,15 +72,15 @@ def verify(block):
 
 #Pour verifier la validite d'une transaction
 def verifytx(tx):
-    if len(tx.addrSender) != 256
+    if len(tx.addrSender) != 256:
         message = "TX_NOK"
         self.wfile.write(message.encode('utf-8'))
         return
-    if len(tx.addrRcpt) != 256 
+    if len(tx.addrRcpt) != 256: 
         message = "TX_NOK"
         self.wfile.write(message.encode('utf-8'))
         return
-    if len(tx.amount) != 256
+    if len(tx.amount) != 256:
         message = "TX_NOK"
         self.wfile.write(message.encode('utf-8'))
         return
