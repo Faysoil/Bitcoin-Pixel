@@ -13,7 +13,7 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'text/plain; charset=utf-8')
         self.end_headers()
-        
+
         # Récupérer l'URL (chemin)
         url = self.path
 
@@ -45,58 +45,65 @@ def verify(block):
     if not block:
         message = "BLOCK_MISSING"
         print(message.encode('utf-8'))
-        return
+        return false
     if len(block.id) != 256:
         message = "BLOCK_INCORRECT"
         print(message.encode('utf-8'))
-        return
+        return false
     if len(block.prev_id) != 256:
         message = "BLOCK_INCORRECT"
         print(message.encode('utf-8'))
-        return
+        return false
     if not block.data:
         message = "BLOCK_INCORRECT"
         print(message.encode('utf-8'))
-        return
+        return false
     if len(block.nounce) != 256:
         message = "BLOCK_INCORRECT"
         print(message.encode('utf-8'))
-        return
+        return false
     if not isinstance(block.height, int):
         message = "BLOCK_INCORRECT"
         print(message.encode('utf-8'))
-        return
+        return false
     if not isinstance(block.timestsamp, int):
         message = "BLOCK_INCORRECT"
         print(message.encode('utf-8'))
-        return
+        return false
+    for i in range(len(block.data)):
+        if not verifytx(block.data[i])
+            message = "TX_NOK"
+            print(message.encode('utf-8'))
+            return false
     message = "BLOCK VERIfIED"
     print(message.encode('utf-8'))
+    return true
 
 #Pour verifier la validite d'une transaction
 def verifytx(tx):
     if len(tx.addrSender) != 256:
         message = "TX_NOK"
         print(message.encode('utf-8'))
-        return
+        return false
     if len(tx.addrRcpt) != 256: 
         message = "TX_NOK"
         print(message.encode('utf-8'))
-        return
+        return false
     if len(tx.amount) != 256:
         message = "TX_NOK"
         print(message.encode('utf-8'))
-        return
+        return false
     if not isinstance(tx.timestsamp, int):
         message = "TX_NOK"
         print(message.encode('utf-8'))
-        return
+        return false
     if not isinstance(tx.sig, str):
         message = "TX_NOK"
         print(message.encode('utf-8'))
-        return
+        return false
     message = "TX_OK"
     print(message.encode('utf-8'))
+    return true
 
 class Transaction:
     def __init__(self, addrSender, addrRcpt, amount, timestamp, sig):
@@ -146,3 +153,4 @@ def new_block(bloc):
         return "Bloc ajouté"
         #Transaction ajouté à la blockchain
     return "Bloc non ajouté"
+
