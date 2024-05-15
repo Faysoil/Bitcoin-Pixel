@@ -10,6 +10,10 @@ blockchain = []
 
 class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
+
+        genesis = create_genesis_block()
+        blockchain.append(genesis)
+        print(blockchain)
         self.send_response(200)
         self.send_header('Content-type', 'text/plain; charset=utf-8')
         self.end_headers()
@@ -154,3 +158,33 @@ def new_block(bloc):
         #Transaction ajouté à la blockchain
     return "Bloc non ajouté"
 
+def calculate_hash(block):
+    block_string = str(block.id) + str(block.previous_hash) + str(block.timestamp) + str(block.data) + str(block.nonce)
+    return hashlib.sha256(block_string.encode()).hexdigest()
+
+# Creation bloc genesis
+def create_genesis_block():
+    
+    genesis_transaction = Transaction("genesis_sender", "genesis_recipient", 1000, time.time())
+
+    genesis_block_data = [genesis_transaction]
+
+    genesis_id = 0
+    genesis_previous_hash = "0"
+    genesis_timestamp = time.time()
+    genesis_nonce = 0
+
+    genesis_hash = calculate_hash(Block(genesis_id, genesis_previous_hash, genesis_timestamp, genesis_block_data, genesis_nonce))
+
+    genesis_block = Block(genesis_id, genesis_previous_hash, genesis_timestamp, genesis_block_data, genesis_hash, genesis_nonce)
+
+    return genesis_block
+
+# Test
+genesis_block = create_genesis_block()
+print("Genesis Block ID:", genesis_block.id)
+print("Genesis Block Previous Hash:", genesis_block.previous_hash)
+print("Genesis Block Timestamp:", genesis_block.timestamp)
+print("Genesis Block Data:", genesis_block.data)
+print("Genesis Block Hash:", genesis_block.hash)
+print("Genesis Block Nonce:", genesis_block.nonce)
