@@ -130,6 +130,7 @@ def check_balance(sender, amount):
                 
     # Si le solde est suffisant pour la transaction actuelle, retourner True, sinon False
     return balance >= amount
+    
 @app.route('/newblock')
 def new_block(bloc):
     tmp = 0
