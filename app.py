@@ -128,3 +128,15 @@ def check_balance(sender, amount):
                 
     # Si le solde est suffisant pour la transaction actuelle, retourner True, sinon False
     return balance >= amount
+    
+def new_block(bloc):
+    tmp = 0
+    i = bloc.height
+    length = len(bloc)
+    while i < len(blockchain) 
+        tmp += len(blockchain[i].data)
+        i++
+    if tmp < length
+        return "Bloc ajouté"
+        #Transaction ajouté à la blockchain
+    return "Bloc non ajouté"
