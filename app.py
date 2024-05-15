@@ -3,6 +3,7 @@ import socketserver
 from datetime import datetime
 
 PORT = 9090
+blockchain = []
 
 class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -26,6 +27,14 @@ with socketserver.TCPServer(("", PORT), MyHttpRequestHandler) as httpd:
     print(f"Le serveur est démarré sur le port {PORT}")
     httpd.serve_forever()
 
+class Block:
+    def __init__(self, id, previous_hash, timestamp, data, hash, nonce):
+        self.id = id
+        self.previous_hash = previous_hash
+        self.timestamp = timestamp
+        self.data = data
+        self.hash = hash
+        self.nonce = nonce
 
 def verify(block):
     if not block:
@@ -83,38 +92,3 @@ def verifytx(tx):
     message = "TX_OK"
     self.wfile.write(message.encode('utf-8'))
 
-
-# class Block:
-#     def __init__(self, id, prev_id, data, height, timestamp):
-#         self.prev_id = prev_id
-#         self.data = data
-#         self.height = height
-#         self.nonce = randomNounce()
-          # Getting the current date and time
-#         dt = datetime.now()
-          # getting the timestamp
-#         ts = datetime.timestamp(dt)
-#         self.timestamp = ts
-          # Calculer l'identifiant du bloc
-#         self.id = self.calculate_hash()
-    
-    # def randomNounce():
-    #     number_of_strings = 5
-    #     length_of_string = 8
-    #     for x in range(number_of_strings):
-    #         return (
-    #             "".join(
-    #                 random.choice(string.ascii_letters + string.digits)
-    #                 for _ in range(length_of_string)
-    #             )
-    #         )
-
-    #def calculate_hash(self):
-    #   block_string = json.dumps({
-    #      "prev_id": self.prev_id,
-            "data": self.data,
-            "height": self.height,
-            "nonce": self.nonce,
-            "timestamp": self.timestamp
-        }, sort_keys=True).encode()
-        return hashlib.sha256(block_string).hexdigest()
