@@ -37,6 +37,7 @@ class Block:
         self.nonce = nonce
 
 #Pour verifier la validite d'un block
+@app.route('/verify')
 def verify(block):
     if not block:
         message = "BLOCK_MISSING"
